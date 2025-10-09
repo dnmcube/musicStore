@@ -41,8 +41,9 @@ using (var scope = app.Services.GetAutofacRoot().BeginLifetimeScope())
 // }
 
 app.UseHttpsRedirection();
-app.UseMiddleware<Middleware>();
+app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<Middleware>();
 
 app.MapControllers();
 

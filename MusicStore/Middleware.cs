@@ -1,10 +1,15 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using Autofac;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
+using Settings;
 
 namespace Controller.Config;
 public class Middleware
@@ -21,59 +26,137 @@ public class Middleware
         _lifetimeScope = lifetimeScope;
     }
 
+    // public async Task Invoke(HttpContext context)
+    // {
+    //     try
+    //     {
+    //         // Получаем токен из заголовка Authorization
+    //         var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+    //         if (authHeader == null || !authHeader.StartsWith("Bearer "))
+    //         {
+    //             await _next(context);
+    //             return;
+    //         }
+    //
+    //         var token = authHeader.Substring("Bearer ".Length).Trim();
+    //
+    //         // Парсим токен и извлекаем jti (уникальный идентификатор токена)
+    //         var tokenHandler = new JsonWebTokenHandler();
+    //         var jwtToken = tokenHandler.ReadJsonWebToken(token);
+    //         var jti = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Jti)?.Value;
+    //         var roleClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+    //         if (string.IsNullOrEmpty(jti))
+    //         {
+    //             _logger.LogWarning("Токен не содержит jti.");
+    //             await _next(context);
+    //             return;
+    //         }
+    //
+    //         using (var scope = _lifetimeScope.BeginLifetimeScope())
+    //         {
+    //             var apiKeyClaim = context.User.FindAll("apiKey").Select(x => x.Value).ToArray();
+    //             var allowedApisClaim = context.User.FindAll("allowedApis").Select(x => x.Value).ToList();
+    //             if (apiKeyClaim.Any() && allowedApisClaim.Any())
+    //             {
+    //                 if (!Guid.TryParse(jti, out Guid userId))
+    //                 {
+    //                     throw new ArgumentException($"Ошибка Jti не GUID {jti}");
+    //                 }
+    //
+    //                 var requestedApi = context.Request.Path.Value?.TrimStart('/'); // 👈 Получаем запрашиваемый API
+    //                 
+    //             }
+    //             else
+    //             {
+    //                 throw new ArgumentException($"Доступ закрыт");
+    //             }
+    //         }
+    //
+    //         // Передаём запрос дальше по пайплайну
+    //         await _next(context);
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         _logger.LogError(ex, "Произошла ошибка во время обработки запроса");
+    //         await HandleExceptionAsync(context, ex);
+    //     }
+    // }
+    
     public async Task Invoke(HttpContext context)
     {
         try
         {
-            // Получаем токен из заголовка Authorization
             var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
-            if (authHeader == null || !authHeader.StartsWith("Bearer "))
+        
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
             {
-                await _next(context);
+                context.Response.StatusCode = 401;
+                await context.Response.WriteAsync("Missing or invalid Authorization header.");
                 return;
             }
-
+        
             var token = authHeader.Substring("Bearer ".Length).Trim();
+            
+            var endpoint = context.GetEndpoint();
+            var allowAnonymous = endpoint?.Metadata?.GetMetadata<IAllowAnonymous>() != null;
 
-            // Парсим токен и извлекаем jti (уникальный идентификатор токена)
-            var tokenHandler = new JsonWebTokenHandler();
-            var jwtToken = tokenHandler.ReadJsonWebToken(token);
-            var jti = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Jti)?.Value;
-            var roleClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-            if (string.IsNullOrEmpty(jti))
+            if (allowAnonymous)
             {
-                _logger.LogWarning("Токен не содержит jti.");
                 await _next(context);
                 return;
             }
+        var tokenHandler = new JwtSecurityTokenHandler();
+        using (var scope = _lifetimeScope.BeginLifetimeScope())
+        {
 
-            using (var scope = _lifetimeScope.BeginLifetimeScope())
+            var _setting = scope.Resolve<IJwtSettings>();
+            var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
             {
-                var apiKeyClaim = context.User.FindAll("apiKey").Select(x => x.Value).ToArray();
-                var allowedApisClaim = context.User.FindAll("allowedApis").Select(x => x.Value).ToList();
-                if (apiKeyClaim.Any() && allowedApisClaim.Any())
-                {
-                    if (!Guid.TryParse(jti, out Guid userId))
-                    {
-                        throw new ArgumentException($"Ошибка Jti не GUID {jti}");
-                    }
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateIssuerSigningKey = true,
+                ValidateLifetime = false, // можешь включить true, когда появится exp
+                ValidIssuer = _setting.GetJwtIssuer,
+                ValidAudience = _setting.GetJwtAudience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_setting.GetJwtSecretKey))
+            }, out var validatedToken);
 
-                    var requestedApi = context.Request.Path.Value?.TrimStart('/'); // 👈 Получаем запрашиваемый API
-                    
-                }
-                else
-                {
-                    throw new ArgumentException($"Доступ закрыт");
-                }
-            }
-
-            // Передаём запрос дальше по пайплайну
+            // Если токен валидный — передаём дальше
+            context.User = principal;
+            // var result = tokenHandler.ValidateToken(token, new TokenValidationParameters
+            // {
+            //     ValidateIssuer = true,
+            //     ValidateAudience = true,
+            //     //ValidateLifetime = true,
+            //     ValidateIssuerSigningKey = true,
+            //     ValidIssuer = _setting.GetJwtIssuer,
+            //     ValidAudience = _setting.GetJwtAudience,
+            //     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_setting.GetJwtSecretKey))
+            // });
             await _next(context);
+          
+        }
+
+      
+        
+       
+
+            try
+            {
+                await _next(context);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Произошла ошибка во время обработки запроса");
+                await HandleExceptionAsync(context, ex);
+            }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Произошла ошибка во время обработки запроса");
-            await HandleExceptionAsync(context, ex);
+            _logger.LogError(ex, "Ошибка проверки токена");
+            context.Response.StatusCode = 401;
+            await context.Response.WriteAsync("Token validation failed.");
         }
     }
 
