@@ -10,4 +10,5 @@ RUN dotnet publish MusicStore/MusicStore.csproj -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=build /app/publish .
+
 ENTRYPOINT ["dotnet", "MusicStore.dll"]
