@@ -1,5 +1,5 @@
 [build]
-buildCommand = "dotnet publish MusicStore/MusicStore.csproj -c Release -o out"
+buildCommand = "docker build -t musicstore ."
 
 [start]
-startCommand = "dotnet out/MusicStore.dll"
+startCommand = "docker run -p 8080:8080 musicstore"
