@@ -1,0 +1,15 @@
+/Volumes/Other/projects/MusicStore/MusicStore/Application/bin/Debug/net7.0/Application.deps.json
+/Volumes/Other/projects/MusicStore/MusicStore/Application/bin/Debug/net7.0/Application.dll
+/Volumes/Other/projects/MusicStore/MusicStore/Application/bin/Debug/net7.0/Application.pdb
+/Volumes/Other/projects/MusicStore/MusicStore/Application/bin/Debug/net7.0/Repository.dll
+/Volumes/Other/projects/MusicStore/MusicStore/Application/bin/Debug/net7.0/Repository.pdb
+/Volumes/Other/projects/MusicStore/MusicStore/Application/obj/Debug/net7.0/Application.csproj.AssemblyReference.cache
+/Volumes/Other/projects/MusicStore/MusicStore/Application/obj/Debug/net7.0/Application.GeneratedMSBuildEditorConfig.editorconfig
+/Volumes/Other/projects/MusicStore/MusicStore/Application/obj/Debug/net7.0/Application.AssemblyInfoInputs.cache
+/Volumes/Other/projects/MusicStore/MusicStore/Application/obj/Debug/net7.0/Application.AssemblyInfo.cs
+/Volumes/Other/projects/MusicStore/MusicStore/Application/obj/Debug/net7.0/Application.csproj.CoreCompileInputs.cache
+/Volumes/Other/projects/MusicStore/MusicStore/Application/obj/Debug/net7.0/Application.csproj.CopyComplete
+/Volumes/Other/projects/MusicStore/MusicStore/Application/obj/Debug/net7.0/Application.dll
+/Volumes/Other/projects/MusicStore/MusicStore/Application/obj/Debug/net7.0/refint/Application.dll
+/Volumes/Other/projects/MusicStore/MusicStore/Application/obj/Debug/net7.0/Application.pdb
+/Volumes/Other/projects/MusicStore/MusicStore/Application/obj/Debug/net7.0/ref/Application.dll
