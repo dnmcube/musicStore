@@ -26,61 +26,7 @@ public class Middleware
         _lifetimeScope = lifetimeScope;
     }
 
-    // public async Task Invoke(HttpContext context)
-    // {
-    //     try
-    //     {
-    //         // Получаем токен из заголовка Authorization
-    //         var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
-    //         if (authHeader == null || !authHeader.StartsWith("Bearer "))
-    //         {
-    //             await _next(context);
-    //             return;
-    //         }
-    //
-    //         var token = authHeader.Substring("Bearer ".Length).Trim();
-    //
-    //         // Парсим токен и извлекаем jti (уникальный идентификатор токена)
-    //         var tokenHandler = new JsonWebTokenHandler();
-    //         var jwtToken = tokenHandler.ReadJsonWebToken(token);
-    //         var jti = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Jti)?.Value;
-    //         var roleClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-    //         if (string.IsNullOrEmpty(jti))
-    //         {
-    //             _logger.LogWarning("Токен не содержит jti.");
-    //             await _next(context);
-    //             return;
-    //         }
-    //
-    //         using (var scope = _lifetimeScope.BeginLifetimeScope())
-    //         {
-    //             var apiKeyClaim = context.User.FindAll("apiKey").Select(x => x.Value).ToArray();
-    //             var allowedApisClaim = context.User.FindAll("allowedApis").Select(x => x.Value).ToList();
-    //             if (apiKeyClaim.Any() && allowedApisClaim.Any())
-    //             {
-    //                 if (!Guid.TryParse(jti, out Guid userId))
-    //                 {
-    //                     throw new ArgumentException($"Ошибка Jti не GUID {jti}");
-    //                 }
-    //
-    //                 var requestedApi = context.Request.Path.Value?.TrimStart('/'); // 👈 Получаем запрашиваемый API
-    //                 
-    //             }
-    //             else
-    //             {
-    //                 throw new ArgumentException($"Доступ закрыт");
-    //             }
-    //         }
-    //
-    //         // Передаём запрос дальше по пайплайну
-    //         await _next(context);
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         _logger.LogError(ex, "Произошла ошибка во время обработки запроса");
-    //         await HandleExceptionAsync(context, ex);
-    //     }
-    // }
+    
     
     public async Task Invoke(HttpContext context)
     {
@@ -123,23 +69,8 @@ public class Middleware
 
             // Если токен валидный — передаём дальше
             context.User = principal;
-            // var result = tokenHandler.ValidateToken(token, new TokenValidationParameters
-            // {
-            //     ValidateIssuer = true,
-            //     ValidateAudience = true,
-            //     //ValidateLifetime = true,
-            //     ValidateIssuerSigningKey = true,
-            //     ValidIssuer = _setting.GetJwtIssuer,
-            //     ValidAudience = _setting.GetJwtAudience,
-            //     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_setting.GetJwtSecretKey))
-            // });
             await _next(context);
-          
         }
-
-      
-        
-       
 
             try
             {

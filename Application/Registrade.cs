@@ -26,7 +26,8 @@ public class Registrade : IRegistrade
         var user = new User()
         {
             Login = userdto.Login,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(userdto.Password)
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(userdto.Password),
+            Email = userdto.Email
         };
         var model = await _userRegistrateRepo.GetUserByLogin(userdto.Login);
         if (model != null)
