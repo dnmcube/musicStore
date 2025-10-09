@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "zIzVj9+fFH8WQlacg6KX3j91pXuBLcezZU4DfB/TDqrvjaJf3mVuXhI5f7BqcvaA2HkbMZJX+q/ddjMluQmW2Q==",
+  "dgSpecHash": "tHQS6TSFip7TwUUZy/C3DLTRUyVnO1ZSCVzBPi9S2OJb7uHKL/enC0L2QFui/mpDkfkVhl/WxKbiM82oy3o6yQ==",
   "success": true,
   "projectFilePath": "/Volumes/Other/projects/MusicStore/MusicStore/Repository/Repository.csproj",
   "expectedPackageFiles": [
@@ -28,7 +28,9 @@
     "/Users/nurlanjaimakhanov/.nuget/packages/system.codedom/4.4.0/system.codedom.4.4.0.nupkg.sha512",
     "/Users/nurlanjaimakhanov/.nuget/packages/system.diagnostics.diagnosticsource/8.0.1/system.diagnostics.diagnosticsource.8.0.1.nupkg.sha512",
     "/Users/nurlanjaimakhanov/.nuget/packages/system.text.encodings.web/7.0.0/system.text.encodings.web.7.0.0.nupkg.sha512",
-    "/Users/nurlanjaimakhanov/.nuget/packages/system.text.json/7.0.0/system.text.json.7.0.0.nupkg.sha512"
+    "/Users/nurlanjaimakhanov/.nuget/packages/system.text.json/7.0.0/system.text.json.7.0.0.nupkg.sha512",
+    "/Users/nurlanjaimakhanov/.nuget/packages/microsoft.netcore.app.ref/7.0.14/microsoft.netcore.app.ref.7.0.14.nupkg.sha512",
+    "/Users/nurlanjaimakhanov/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.14/microsoft.aspnetcore.app.ref.7.0.14.nupkg.sha512"
   ],
   "logs": []
 }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "7VJu7Kkp2TCHKM8BGnjXUwE+lNZ/2Ym+XXnv/EYSJhKPhK/hkBWXl8S61l6KIy6yRV0E+JKYypBwWZajyr7Opg==",
+  "dgSpecHash": "HTJ3beDy27782OnzxXXnXX7igGt60fuVphm7wYz6Jm+/eiwGpP/obQpX0+V8M4chs6zwAzvQqkC8BA/bz8iHLw==",
   "success": true,
   "projectFilePath": "/Volumes/Other/projects/MusicStore/MusicStore/MusicStore/MusicStore.csproj",
   "expectedPackageFiles": [
@@ -50,7 +50,10 @@
     "/Users/nurlanjaimakhanov/.nuget/packages/system.security.cryptography.cng/4.5.0/system.security.cryptography.cng.4.5.0.nupkg.sha512",
     "/Users/nurlanjaimakhanov/.nuget/packages/system.text.encoding/4.3.0/system.text.encoding.4.3.0.nupkg.sha512",
     "/Users/nurlanjaimakhanov/.nuget/packages/system.text.encodings.web/7.0.0/system.text.encodings.web.7.0.0.nupkg.sha512",
-    "/Users/nurlanjaimakhanov/.nuget/packages/system.text.json/7.0.0/system.text.json.7.0.0.nupkg.sha512"
+    "/Users/nurlanjaimakhanov/.nuget/packages/system.text.json/7.0.0/system.text.json.7.0.0.nupkg.sha512",
+    "/Users/nurlanjaimakhanov/.nuget/packages/microsoft.netcore.app.ref/7.0.14/microsoft.netcore.app.ref.7.0.14.nupkg.sha512",
+    "/Users/nurlanjaimakhanov/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.14/microsoft.aspnetcore.app.ref.7.0.14.nupkg.sha512",
+    "/Users/nurlanjaimakhanov/.nuget/packages/microsoft.netcore.app.host.osx-arm64/7.0.14/microsoft.netcore.app.host.osx-arm64.7.0.14.nupkg.sha512"
   ],
   "logs": []
 }

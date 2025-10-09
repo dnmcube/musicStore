@@ -13,3 +13,4 @@
 /Volumes/Other/projects/MusicStore/MusicStore/Application/obj/Debug/net7.0/refint/Application.dll
 /Volumes/Other/projects/MusicStore/MusicStore/Application/obj/Debug/net7.0/Application.pdb
 /Volumes/Other/projects/MusicStore/MusicStore/Application/obj/Debug/net7.0/ref/Application.dll
+/Volumes/Other/projects/MusicStore/MusicStore/Application/obj/Debug/net7.0/Application.sourcelink.json

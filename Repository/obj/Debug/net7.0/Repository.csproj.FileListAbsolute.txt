@@ -12,3 +12,4 @@
 /Volumes/Other/projects/MusicStore/MusicStore/Repository/obj/Debug/net7.0/Repository.pdb
 /Volumes/Other/projects/MusicStore/MusicStore/Repository/obj/Debug/net7.0/Repository.genruntimeconfig.cache
 /Volumes/Other/projects/MusicStore/MusicStore/Repository/obj/Debug/net7.0/ref/Repository.dll
+/Volumes/Other/projects/MusicStore/MusicStore/Repository/obj/Debug/net7.0/Repository.sourcelink.json

@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "001YQANfBwG5tgyy4+2CAYkF3M+cWKyd9NDWnZXUg9SwAsK6/Q4OyAhOktRkOsPyvmzsj9j4dazo0ldihNdCXw==",
+  "dgSpecHash": "prA9FzdqUbgb3kz4vqcE++Cm5tw0/8c3djw7sVjUbthvw57p6C+3nmj1R3yATYEbGaiYdBWGhheQJ671vE/yKw==",
   "success": true,
   "projectFilePath": "/Volumes/Other/projects/MusicStore/MusicStore/CredentialsModule/CredentialsModule.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/Users/nurlanjaimakhanov/.nuget/packages/microsoft.netcore.app.ref/7.0.14/microsoft.netcore.app.ref.7.0.14.nupkg.sha512",
+    "/Users/nurlanjaimakhanov/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.14/microsoft.aspnetcore.app.ref.7.0.14.nupkg.sha512"
+  ],
   "logs": []
 }
