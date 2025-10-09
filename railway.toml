@@ -1,0 +1,6 @@
+[build]
+builder = "paketobuildpacks/builder:base"
+buildCommand = "dotnet publish MusicStore/MusicStore.csproj -c Release -o out"
+
+[start]
+startCommand = "dotnet out/MusicStore.dll"
