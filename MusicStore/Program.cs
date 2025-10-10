@@ -24,7 +24,16 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 var bearer = new BearerServiceAdd(builder.Configuration);
 bearer.SetBearer(ref builder);
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("Settings"));
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy
+            .AllowAnyOrigin()    // Разрешаем любые источники
+            .AllowAnyMethod()    // Разрешаем любые HTTP-методы (GET, POST, PUT и т.д.)
+            .AllowAnyHeader();   // Разрешаем любые заголовки
+    });
+});
 var app = builder.Build();
 
 using (var scope = app.Services.GetAutofacRoot().BeginLifetimeScope())
