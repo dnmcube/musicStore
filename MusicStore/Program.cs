@@ -35,7 +35,7 @@ builder.Services.AddCors(options =>
     });
 });
 var app = builder.Build();
-
+app.UseCors("AllowAll");
 using (var scope = app.Services.GetAutofacRoot().BeginLifetimeScope())
 {
     var initializer = scope.Resolve<ISeedDataRepo>();
