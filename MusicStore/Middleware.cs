@@ -30,15 +30,23 @@ public class Middleware
     
     public async Task Invoke(HttpContext context)
     {
-        try
-        {
+      
             var endpoint = context.GetEndpoint();
             var allowAnonymous = endpoint?.Metadata?.GetMetadata<IAllowAnonymous>() != null;
     
             if (allowAnonymous)
             {
-                await _next(context);
-                return;
+                try
+                {
+                    await _next(context);
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Произошла ошибка во время обработки запроса");
+                    await HandleExceptionAsync(context, ex);
+                    return;
+                }
             }
             
             var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
@@ -53,44 +61,38 @@ public class Middleware
             var token = authHeader.Substring("Bearer ".Length).Trim();
             
         
-        var tokenHandler = new JwtSecurityTokenHandler();
-        using (var scope = _lifetimeScope.BeginLifetimeScope())
-        {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                using (var scope = _lifetimeScope.BeginLifetimeScope())
+                {
 
-            var _setting = scope.Resolve<IJwtSettings>();
-            var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateIssuerSigningKey = true,
-                ValidateLifetime = false, // можешь включить true, когда появится exp
-                ValidIssuer = _setting.GetJwtIssuer,
-                ValidAudience = _setting.GetJwtAudience,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_setting.GetJwtSecretKey))
-            }, out var validatedToken);
+                    var _setting = scope.Resolve<IJwtSettings>();
+                    var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidateLifetime = false, // можешь включить true, когда появится exp
+                        ValidIssuer = _setting.GetJwtIssuer,
+                        ValidAudience = _setting.GetJwtAudience,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_setting.GetJwtSecretKey))
+                    }, out var validatedToken);
 
-            // Если токен валидный — передаём дальше
-            context.User = principal;
-            await _next(context);
-        }
+                    // Если токен валидный — передаём дальше
+                    context.User = principal;
+                    try
+                    {
+                        await _next(context);
+                        return;
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Произошла ошибка во время обработки запроса");
+                        await HandleExceptionAsync(context, ex);
+                    }
+                }
 
-            try
-            {
-                await _next(context);
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Произошла ошибка во время обработки запроса");
-                await HandleExceptionAsync(context, ex);
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Ошибка проверки токена");
-            context.Response.StatusCode = 401;
-            await context.Response.WriteAsync("Token validation failed.");
-        }
+      
+     
     }
 
     private static Task HandleExceptionAsync(HttpContext context, Exception ex)
