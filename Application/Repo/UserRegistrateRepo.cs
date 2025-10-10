@@ -34,6 +34,7 @@ public class UserRegistrateRepo:BaseRepo,  IUserRegistrateRepo
         {
             Login = userModel.Login,
             PasswordHash = userModel.PasswordHash,
+            Email = userModel.Email,
             Token = userModel.Token ?? "",
             FirstName = userModel.FirstName,
             SecondName = userModel.SecondName,
@@ -45,6 +46,7 @@ public class UserRegistrateRepo:BaseRepo,  IUserRegistrateRepo
          var res = await _context.Set<User>().Where(x => x.IsDeleted == false && x.Id == userModel.Id).FirstOrDefaultAsync();
          res.Login = userModel.Login;
          res.Token = userModel.Token;
+         res.Email = userModel.Email;
          res.FirstName = userModel.FirstName;
          res.SecondName = userModel.SecondName;
          res.LastName = userModel.LastName; 
