@@ -21,9 +21,18 @@ public class RegistrationController : ControllerBase
     [HttpPost("Registration")]
     public async Task<IActionResult> Registration([FromBody] UserDto user)
     {
-        var _registrade = _lifetimeScope.Resolve<IRegistrade>();
-        await _registrade.Execute(user);
-        return Ok();
+        try
+        {
+            var _registrade = _lifetimeScope.Resolve<IRegistrade>();
+            await _registrade.Execute(user);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+   
     }
     
     [AllowAnonymous]
