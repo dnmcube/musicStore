@@ -32,6 +32,15 @@ public class Middleware
     {
         try
         {
+            var endpoint = context.GetEndpoint();
+            var allowAnonymous = endpoint?.Metadata?.GetMetadata<IAllowAnonymous>() != null;
+    
+            if (allowAnonymous)
+            {
+                await _next(context);
+                return;
+            }
+            
             var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
         
             if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
@@ -43,14 +52,7 @@ public class Middleware
         
             var token = authHeader.Substring("Bearer ".Length).Trim();
             
-            var endpoint = context.GetEndpoint();
-            var allowAnonymous = endpoint?.Metadata?.GetMetadata<IAllowAnonymous>() != null;
-
-            if (allowAnonymous)
-            {
-                await _next(context);
-                return;
-            }
+        
         var tokenHandler = new JwtSecurityTokenHandler();
         using (var scope = _lifetimeScope.BeginLifetimeScope())
         {
