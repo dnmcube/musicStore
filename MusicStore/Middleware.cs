@@ -126,7 +126,7 @@ public class Middleware
             tracer = formattedTrace,
             innerexeption = ex.InnerException != null ? ex.InnerException.ToString() : ""
         };
-        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
       
 
