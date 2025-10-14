@@ -42,8 +42,13 @@ public class RegistrationController : ControllerBase
         var _auth = _lifetimeScope.Resolve<IAuth>(); 
         (bool flag, string token) credentialsBool = await _auth.Execute(user);
         if(!credentialsBool.flag) return Unauthorized("Invalid credentials");
-        
-        return Ok(credentialsBool.token);
+
+        var res = new
+        {
+            token = credentialsBool.token,
+            refreshToken = ""
+        };
+        return Ok(res);
     }
     
     [Authorize]
