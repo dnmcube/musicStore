@@ -53,7 +53,7 @@ public class RegistrationController : ControllerBase
     
     [AllowAnonymous]
     [HttpPost("Refresh")]
-    public async Task<IActionResult> Refresh([FromBody] string refreshToken)
+    public async Task<IActionResult> Refresh([FromForm] string refreshToken)
     {
         var _auth = _lifetimeScope.Resolve<IAuth>(); 
         var res = await _auth.RefreshTokenUpdate(refreshToken);
