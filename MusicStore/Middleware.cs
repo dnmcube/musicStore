@@ -71,7 +71,7 @@ public class Middleware
                         ValidateIssuer = true,
                         ValidateAudience = true,
                         ValidateIssuerSigningKey = true,
-                        ValidateLifetime = false, // можешь включить true, когда появится exp
+                        ValidateLifetime = true, // можешь включить true, когда появится exp
                         ValidIssuer = _setting.GetJwtIssuer,
                         ValidAudience = _setting.GetJwtAudience,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_setting.GetJwtSecretKey))
