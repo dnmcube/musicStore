@@ -66,19 +66,31 @@ public class Middleware
                 {
 
                     var _setting = scope.Resolve<IJwtSettings>();
-                    var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
+                    try
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidateLifetime = true, // можешь включить true, когда появится exp
-                        ValidIssuer = _setting.GetJwtIssuer,
-                        ValidAudience = _setting.GetJwtAudience,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_setting.GetJwtSecretKey))
-                    }, out var validatedToken);
+                        var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidateAudience = true,
+                            ValidateIssuerSigningKey = true,
+                            ValidateLifetime = true, // можешь включить true, когда появится exp
+                            ValidIssuer = _setting.GetJwtIssuer,
+                            ValidAudience = _setting.GetJwtAudience,
+                            IssuerSigningKey =
+                                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_setting.GetJwtSecretKey))
+                        }, out var validatedToken);
+                        // Если токен валидный — передаём дальше
+                        context.User = principal;
+                        
+                    }  
+                    catch (SecurityTokenExpiredException)
+                    {
+                        context.Response.StatusCode = 401;
+                        await context.Response.WriteAsync("Token expired.");
+                        return;
+                    }
 
-                    // Если токен валидный — передаём дальше
-                    context.User = principal;
+               
                     try
                     {
                         await _next(context);
