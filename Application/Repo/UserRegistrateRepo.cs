@@ -46,6 +46,8 @@ public class UserRegistrateRepo:BaseRepo,  IUserRegistrateRepo
          var res = await _context.Set<User>().Where(x => x.IsDeleted == false && x.Id == userModel.Id).FirstOrDefaultAsync();
          res.Login = userModel.Login;
          res.Token = userModel.Token;
+         res.RefreshToken = userModel.RefreshToken;
+         res.ExpiresAt = userModel.ExpiresAt;
          res.Email = userModel.Email;
          res.FirstName = userModel.FirstName;
          res.SecondName = userModel.SecondName;
