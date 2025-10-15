@@ -1,14 +1,20 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Runtime.InteropServices.JavaScript;
+using System.Text;
 using Application.Dto;
 using Application.UserRegistrate.Domain.Contracts;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Application;
 
 public class Auth:IAuth 
 {
     private readonly IUserRegistrateRepo _userRegistrateRepo;
-    public Auth(IUserRegistrateRepo userRegistrateRepo)
+    private readonly IJwtService _jwtService;
+    public Auth(IUserRegistrateRepo userRegistrateRepo, IJwtService jwtService)
     {
         _userRegistrateRepo = userRegistrateRepo;
+        _jwtService = jwtService;
     }
 
     public async Task<(bool, string)> Execute(UserDto userDto)
@@ -22,5 +28,21 @@ public class Auth:IAuth
             return (false, "");
 
         return (true, model.Token);
+    }
+
+
+    public async Task<object> RefreshTokenUpdate(string RefreshToken)
+    {
+       (string Token, string RefreshToken, string error) res =  await _jwtService.RefreshTokenGet(RefreshToken);
+       if (string.IsNullOrWhiteSpace(res.error))
+       {
+           return new
+           {
+               token = res.Token,
+               refreshToken = res.RefreshToken
+           };
+       }
+
+       return res.error;
     }
 }

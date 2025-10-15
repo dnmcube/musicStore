@@ -41,7 +41,9 @@ public class Registrade : IRegistrade
         var role = await _userRegistrateRepo.GetRole(false, RolesEnum.Admin.ToString());
         
         var token = _jwtService.GenerateToken(user.Login, RolesEnum.Client.ToString(), Id);
+        user.RefreshToken = _jwtService.GenerateRefreshToken(user.Login, RolesEnum.Client.ToString(), Id);
         user.Token = token;
+        user.ExpiresAt = DateTime.Now.AddDays(7);
         user.Id = Id;
 
 

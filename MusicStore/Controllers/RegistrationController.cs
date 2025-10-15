@@ -51,6 +51,16 @@ public class RegistrationController : ControllerBase
         return Ok(res);
     }
     
+    [AllowAnonymous]
+    [HttpPost("Refresh")]
+    public async Task<IActionResult> Refresh([FromBody] string refreshToken)
+    {
+        var _auth = _lifetimeScope.Resolve<IAuth>(); 
+        var res = await _auth.RefreshTokenUpdate(refreshToken);
+        return Ok(res);
+    }
+
+    
     [Authorize]
     [HttpGet("Get")]
     public async Task<IActionResult> Get()
