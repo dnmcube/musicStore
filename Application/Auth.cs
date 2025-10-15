@@ -17,17 +17,17 @@ public class Auth:IAuth
         _jwtService = jwtService;
     }
 
-    public async Task<(bool, string)> Execute(UserDto userDto)
+    public async Task<(bool, string, string)> Execute(UserDto userDto)
     {
         var model = await _userRegistrateRepo.GetUserByLogin(userDto.Login);
         if (model == null)
-            return (false, "");
+            return (false, "", "");
         
         var validPassword = BCrypt.Net.BCrypt.Verify(userDto.Password, model.PasswordHash);
         if (!validPassword)
-            return (false, "");
+            return (false, "", "");
 
-        return (true, model.Token);
+        return (true, model.Token, model.RefreshToken);
     }
 
 
