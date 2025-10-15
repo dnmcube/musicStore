@@ -121,6 +121,13 @@ public class JwtService: IJwtService
         var newAccess = GenerateToken(user.Login, RolesEnum.Client.ToString(), user.Id);
         var newRefresh = GenerateRefreshToken(user.Login, RolesEnum.Client.ToString(), user.Id);
 
+        user.Token = newAccess;
+        user.RefreshToken = newRefresh;
+        
+        await _userRegistrateRepo.UpdateUserAsync(user);
+        await _userRegistrateRepo.SaveChangesAsync();
+        
+        
         return (newAccess, newRefresh, "");
     }
  

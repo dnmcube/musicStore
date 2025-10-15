@@ -40,14 +40,10 @@ public class RegistrationController : ControllerBase
     public async Task<IActionResult> Authorization([FromBody] UserDto user)
     {
         var _auth = _lifetimeScope.Resolve<IAuth>(); 
-        (bool flag, string token, string refreshToken) credentialsBool = await _auth.Execute(user);
+        (bool flag, object tokenObject) credentialsBool = await _auth.Execute(user);
         if(!credentialsBool.flag) return Unauthorized("Invalid credentials");
 
-        var res = new
-        {
-            token = credentialsBool.token,
-            refreshToken = credentialsBool.refreshToken
-        };
+        var res = credentialsBool.tokenObject;
         return Ok(res);
     }
     
