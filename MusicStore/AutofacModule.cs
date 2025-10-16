@@ -27,7 +27,7 @@ public class AutofacModule:Module
         builder.RegisterType<ProductRepo>().As<IProductRepo>().InstancePerLifetimeScope();      
         builder.RegisterType<Product>().As<IProduct>().InstancePerLifetimeScope();      
         builder.RegisterType<Auth>().As<IAuth>().InstancePerLifetimeScope();      
-        builder.RegisterType<Basket>().As<IBasket>().InstancePerLifetimeScope();      
+        builder.RegisterType<Baskets>().As<IBasket>().InstancePerLifetimeScope();      
         builder.RegisterType<BasketRepo>().As<IBasketRepo>().InstancePerLifetimeScope();      
 
         

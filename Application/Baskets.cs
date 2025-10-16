@@ -4,11 +4,11 @@ using Application.Repo;
 
 namespace Application;
 
-public class Basket : IBasket
+public class Baskets : IBasket
 {
     private  IBasketRepo _basketRepo { get; set; }
 
-    public Basket( IBasketRepo basketRepo)
+    public Baskets( IBasketRepo basketRepo)
     {
         _basketRepo = basketRepo;
     }
