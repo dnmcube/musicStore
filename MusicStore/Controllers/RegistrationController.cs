@@ -84,4 +84,31 @@ public class RegistrationController : ControllerBase
         var res =  await _product.Get(dto);
         return Ok(res);
     }
+    
+    [AllowAnonymous]
+    [HttpGet("GetBasket")]
+    public async Task<IActionResult> GetBasket([FromForm] Guid GuestId)
+    {
+        var _basket = _lifetimeScope.Resolve<IBasket>();
+        var res = await _basket.GetBasket(GuestId);
+        return Ok(res);
+    }
+    
+    [AllowAnonymous]
+    [HttpGet("BasketAddItem")]
+    public async Task<IActionResult> BasketAddItem([FromForm] Guid GuestId, Guid ProductId)
+    {
+        var _basket = _lifetimeScope.Resolve<IBasket>();
+         await _basket.AddItemBasket(GuestId, ProductId);
+        return Ok();
+    }
+    
+    [AllowAnonymous]
+    [HttpGet("BasketRemoveItem")]
+    public async Task<IActionResult> BasketRemoveItem([FromForm] Guid GuestId, Guid ProductId)
+    {
+        var _basket = _lifetimeScope.Resolve<IBasket>();
+        await _basket.DeleteItemBasket(GuestId, ProductId);
+        return Ok();
+    }
 }

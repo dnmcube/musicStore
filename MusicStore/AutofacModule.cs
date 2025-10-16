@@ -9,6 +9,7 @@ using Controller.Seeds.Interfaces;
 using Infrastructure.Frameworks.DataBase;
 using Inrastructure.Seeds.Repositories;
 using Settings;
+using Basket = Infrastructure.Frameworks.Models.Basket;
 
 namespace TradeKz;
 
@@ -26,6 +27,8 @@ public class AutofacModule:Module
         builder.RegisterType<ProductRepo>().As<IProductRepo>().InstancePerLifetimeScope();      
         builder.RegisterType<Product>().As<IProduct>().InstancePerLifetimeScope();      
         builder.RegisterType<Auth>().As<IAuth>().InstancePerLifetimeScope();      
+        builder.RegisterType<Basket>().As<IBasket>().InstancePerLifetimeScope();      
+        builder.RegisterType<BasketRepo>().As<IBasketRepo>().InstancePerLifetimeScope();      
 
         
         builder.Register(c =>

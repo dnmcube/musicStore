@@ -37,6 +37,7 @@ public class ProductRepo:BaseRepo, IProductRepo
         // Выборка нужных полей
         var res = await query.Select(x => new ProductDto()
         {
+            Id = x.Id,
             Description = x.Description,
             Name = x.Name,
             Price = x.Price,

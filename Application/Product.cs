@@ -18,4 +18,16 @@ public class Product : IProduct
         var productModel = await _productRepo.GetByFilter(dto);
         return productModel;
     }
+    
+    public async Task<List<ProductDto>> AddItemBasket(ProductFilterDto dto)
+    {
+        var productModel = await _productRepo.GetByFilter(dto);
+        return productModel;
+    }
+    
+    public async Task<List<ProductDto>> DeleteItemBasket(ProductFilterDto dto)
+    {
+        var productModel = await _productRepo.GetByFilter(dto);
+        return productModel;
+    }
 }
