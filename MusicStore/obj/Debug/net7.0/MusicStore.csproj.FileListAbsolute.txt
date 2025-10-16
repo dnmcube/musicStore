@@ -60,3 +60,5 @@
 /Volumes/Other/projects/MusicStore/MusicStore/MusicStore/bin/Debug/net7.0/BCrypt.Net-Next.dll
 /Volumes/Other/projects/MusicStore/MusicStore/MusicStore/obj/Debug/net7.0/MusicStore.sourcelink.json
 /Volumes/Other/projects/MusicStore/MusicStore/MusicStore/bin/Debug/net7.0/appsettings.Production.json
+/Volumes/Other/projects/MusicStore/MusicStore/MusicStore/bin/Debug/net7.0/CredentialsModule.dll
+/Volumes/Other/projects/MusicStore/MusicStore/MusicStore/bin/Debug/net7.0/CredentialsModule.pdb

@@ -765,9 +765,6 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
         "dependencies": {
-          "BCrypt.Net-Next": "4.0.3",
-          "Microsoft.AspNetCore.Authentication.JwtBearer": "7.0.20",
-          "Microsoft.IdentityModel.Tokens": "6.35.0",
           "Repository": "1.0.0"
         },
         "compile": {
@@ -775,6 +772,21 @@
         },
         "runtime": {
           "bin/placeholder/Application.dll": {}
+        }
+      },
+      "CredentialsModule/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "BCrypt.Net-Next": "4.0.3",
+          "Repository": "1.0.0",
+          "System.IdentityModel.Tokens.Jwt": "6.35.0"
+        },
+        "compile": {
+          "bin/placeholder/CredentialsModule.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/CredentialsModule.dll": {}
         }
       },
       "Repository/1.0.0": {
@@ -2347,6 +2359,11 @@
       "path": "../Application/Application.csproj",
       "msbuildProject": "../Application/Application.csproj"
     },
+    "CredentialsModule/1.0.0": {
+      "type": "project",
+      "path": "../CredentialsModule/CredentialsModule.csproj",
+      "msbuildProject": "../CredentialsModule/CredentialsModule.csproj"
+    },
     "Repository/1.0.0": {
       "type": "project",
       "path": "../Repository/Repository.csproj",
@@ -2358,6 +2375,7 @@
       "Application >= 1.0.0",
       "Autofac >= 8.4.0",
       "Autofac.Extensions.DependencyInjection >= 10.0.0",
+      "CredentialsModule >= 1.0.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 7.0.20",
       "Microsoft.AspNetCore.OpenApi >= 7.0.12",
       "Microsoft.EntityFrameworkCore.Design >= 7.0.20",
@@ -2393,6 +2411,9 @@
           "projectReferences": {
             "/Volumes/Other/projects/MusicStore/MusicStore/Application/Application.csproj": {
               "projectPath": "/Volumes/Other/projects/MusicStore/MusicStore/Application/Application.csproj"
+            },
+            "/Volumes/Other/projects/MusicStore/MusicStore/CredentialsModule/CredentialsModule.csproj": {
+              "projectPath": "/Volumes/Other/projects/MusicStore/MusicStore/CredentialsModule/CredentialsModule.csproj"
             },
             "/Volumes/Other/projects/MusicStore/MusicStore/Repository/Repository.csproj": {
               "projectPath": "/Volumes/Other/projects/MusicStore/MusicStore/Repository/Repository.csproj"

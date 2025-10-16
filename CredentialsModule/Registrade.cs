@@ -25,15 +25,21 @@ public class Registrade : IRegistrade
     {
         var user = new User()
         {
+            Id = userdto.GuestId,
             Login = userdto.Login,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(userdto.Password),
             Email = userdto.Email
         };
+        
         var model = await _userRegistrateRepo.GetUserByLogin(userdto.Login);
         if (model != null)
-        {
             throw new Exception($"Такой логин уже существует в системе ({userdto.Login})");
-        }
+        
+        model = await _userRegistrateRepo.GetUserById(userdto.GuestId);
+        if (model != null)
+            throw new Exception($"Такой гость уже существует в системе ({userdto.Login})");
+        
+    
         
         var Id = await _userRegistrateRepo.AddUsersAsync(user);
         await _userRegistrateRepo.SaveChangesAsync();
@@ -52,5 +58,10 @@ public class Registrade : IRegistrade
         await _userRegistrateRepo.AddUsersRolesAsync(Id, role.Id);
 
         await _userRegistrateRepo.SaveChangesAsync();
+    }
+
+    public async Task<Guid> Guest()
+    {
+       return await _userRegistrateRepo.AddGuestAsync();
     }
 }

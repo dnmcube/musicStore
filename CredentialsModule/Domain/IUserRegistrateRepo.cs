@@ -10,6 +10,7 @@ public interface IUserRegistrateRepo
     Task<User?> GetUserByLogin(string login, bool isDeleted = false);
     Task<User?> GetUserById(Guid id, bool isDeleted = false);
     Task<Guid> AddUsersAsync(User userModel);
+    Task<Guid> AddGuestAsync();
     Task UpdateUserAsync(User userModel);
     Task<List<User>> GetUsers(bool isDeleted);
     Task<Role?> GetRole(bool isDeleted, string roleName);

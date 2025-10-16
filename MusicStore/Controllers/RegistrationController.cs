@@ -1,4 +1,5 @@
 using Application;
+using Application.Domine;
 using Application.Dto;
 using Autofac;
 using Infrastructure.Frameworks.Models;
@@ -36,6 +37,24 @@ public class RegistrationController : ControllerBase
     }
     
     [AllowAnonymous]
+    [HttpGet("Guest")]
+    public async Task<IActionResult> Guest([FromBody] UserDto user)
+    {
+        try
+        {
+            var _registrade = _lifetimeScope.Resolve<IRegistrade>();
+            var id =await _registrade.Guest();
+            return Ok(id);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+   
+    }
+    
+    [AllowAnonymous]
     [HttpPost("Authorization")]
     public async Task<IActionResult> Authorization([FromBody] UserDto user)
     {
@@ -57,11 +76,12 @@ public class RegistrationController : ControllerBase
     }
 
     
-    [Authorize]
-    [HttpGet("Get")]
-    public async Task<IActionResult> Get()
+    [AllowAnonymous]
+    [HttpGet("Products")]
+    public async Task<IActionResult> Get(ProductFilterDto dto)
     {
-        // await _registrade.Execute(user);
-        return Ok("Ok");
+        var _product = _lifetimeScope.Resolve<IProduct>();
+        var res =  await _product.Get(dto);
+        return Ok(res);
     }
 }

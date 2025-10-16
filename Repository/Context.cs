@@ -19,6 +19,26 @@ public class Context : DbContext
      
     }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<BaseModel>(entity =>
+        {
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("gen_random_uuid()");  // для PostgreSQL
+
+            entity.Property(e => e.CreateAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.Property(e => e.UpdateAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false);
+        });
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -31,6 +51,10 @@ public class Context : DbContext
     // Добавляем DbSet для сущностей
 
     public DbSet<User> User { get; set; }
+    public DbSet<Guest> Guest { get; set; }
+    public DbSet<Products> Products { get; set; }
+    public DbSet<BoughtUserProduct> BoughtUserProduct { get; set; }
+    public DbSet<Basket> Basket { get; set; }
     public DbSet<Role> Role { get; set; }
     public DbSet<UserRole> UserRole { get; set; }
 

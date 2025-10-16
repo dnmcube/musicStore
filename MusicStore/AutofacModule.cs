@@ -1,5 +1,7 @@
 using System.Net.Mime;
 using Application;
+using Application.Domine;
+using Application.Repo;
 using Application.UserRegistrate.Domain.Contracts;
 using Application.UserRegistrate.Repositories;
 using Autofac;
@@ -21,6 +23,8 @@ public class AutofacModule:Module
         builder.RegisterType<SeedDataRepo>().As<ISeedDataRepo>().InstancePerLifetimeScope();      
         builder.RegisterType<UserRegistrateRepo>().As<IUserRegistrateRepo>().InstancePerLifetimeScope();      
         builder.RegisterType<Registrade>().As<IRegistrade>().InstancePerLifetimeScope();      
+        builder.RegisterType<ProductRepo>().As<IProductRepo>().InstancePerLifetimeScope();      
+        builder.RegisterType<Product>().As<IProduct>().InstancePerLifetimeScope();      
         builder.RegisterType<Auth>().As<IAuth>().InstancePerLifetimeScope();      
 
         

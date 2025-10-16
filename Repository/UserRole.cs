@@ -4,9 +4,9 @@ namespace Infrastructure.Frameworks.Models;
 
 public class UserRole :BaseModel
 {
-    [ForeignKey(nameof(LoginId))]
+    [ForeignKey(nameof(UserId))]
     public User? User { get; set;}
-    public Guid? LoginId { get; set;}
+    public Guid? UserId { get; set;}
 
 
     

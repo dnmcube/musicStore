@@ -13,11 +13,11 @@ public class UserRegistrateRepo:BaseRepo,  IUserRegistrateRepo
     }
     public async Task<Guid> AddUsersRolesAsync(Guid loginId, Guid roleId)
     {
-        var res = await _context.Set<UserRole>().Where(x => x.IsDeleted == false && x.LoginId == loginId && x.RoleId == roleId).FirstOrDefaultAsync();
+        var res = await _context.Set<UserRole>().Where(x => x.IsDeleted == false && x.UserId == loginId && x.RoleId == roleId).FirstOrDefaultAsync();
         if (res != null) return res.Id;
        return await AddAsync(new UserRole
        {
-           LoginId = loginId,
+           UserId = loginId,
            RoleId = roleId,
        });
     }
@@ -40,6 +40,11 @@ public class UserRegistrateRepo:BaseRepo,  IUserRegistrateRepo
             SecondName = userModel.SecondName,
             LastName = userModel.LastName
         });
+    }
+
+    public async Task<Guid> AddGuestAsync()
+    {
+        return await AddAsync(new Guest());
     }
     public async Task UpdateUserAsync(User userModel)
     {

@@ -22,38 +22,139 @@ namespace Repository.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Infrastructure.Frameworks.Models.Role", b =>
+            modelBuilder.Entity("Infrastructure.Frameworks.Models.BaseModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<DateTime>("CreateAt")
-                        .HasColumnType("timestamp without time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime>("UpdateAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BaseModel");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("BaseModel");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("Infrastructure.Frameworks.Models.Basket", b =>
+                {
+                    b.HasBaseType("Infrastructure.Frameworks.Models.BaseModel");
+
+                    b.Property<Guid>("GuestId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProductsId")
+                        .HasColumnType("uuid");
+
+                    b.HasIndex("GuestId");
+
+                    b.HasIndex("ProductsId");
+
+                    b.HasDiscriminator().HasValue("Basket");
+                });
+
+            modelBuilder.Entity("Infrastructure.Frameworks.Models.BoughtUserProduct", b =>
+                {
+                    b.HasBaseType("Infrastructure.Frameworks.Models.BaseModel");
+
+                    b.Property<int>("ProductCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ProductDescription")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("ProductPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasIndex("UserId");
+
+                    b.HasDiscriminator().HasValue("BoughtUserProduct");
+                });
+
+            modelBuilder.Entity("Infrastructure.Frameworks.Models.Guest", b =>
+                {
+                    b.HasBaseType("Infrastructure.Frameworks.Models.BaseModel");
+
+                    b.HasDiscriminator().HasValue("Guest");
+                });
+
+            modelBuilder.Entity("Infrastructure.Frameworks.Models.Products", b =>
+                {
+                    b.HasBaseType("Infrastructure.Frameworks.Models.BaseModel");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsSclad")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdateAt")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.ToTable("Role");
+                    b.HasDiscriminator().HasValue("Products");
+                });
+
+            modelBuilder.Entity("Infrastructure.Frameworks.Models.Role", b =>
+                {
+                    b.HasBaseType("Infrastructure.Frameworks.Models.BaseModel");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.ToTable("BaseModel", t =>
+                        {
+                            t.Property("Name")
+                                .HasColumnName("Role_Name");
+                        });
+
+                    b.HasDiscriminator().HasValue("Role");
                 });
 
             modelBuilder.Entity("Infrastructure.Frameworks.Models.User", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("timestamp without time zone");
+                    b.HasBaseType("Infrastructure.Frameworks.Models.BaseModel");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -64,9 +165,6 @@ namespace Repository.Migrations
 
                     b.Property<string>("FirstName")
                         .HasColumnType("text");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("LastName")
                         .HasColumnType("text");
@@ -87,55 +185,73 @@ namespace Repository.Migrations
                     b.Property<string>("Token")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdateAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("User");
+                    b.HasDiscriminator().HasValue("User");
                 });
 
             modelBuilder.Entity("Infrastructure.Frameworks.Models.UserRole", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<Guid?>("LoginId")
-                        .HasColumnType("uuid");
+                    b.HasBaseType("Infrastructure.Frameworks.Models.BaseModel");
 
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("UpdateAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LoginId");
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UserRole");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("BaseModel", t =>
+                        {
+                            t.Property("UserId")
+                                .HasColumnName("UserRole_UserId");
+                        });
+
+                    b.HasDiscriminator().HasValue("UserRole");
+                });
+
+            modelBuilder.Entity("Infrastructure.Frameworks.Models.Basket", b =>
+                {
+                    b.HasOne("Infrastructure.Frameworks.Models.Guest", "Guest")
+                        .WithMany()
+                        .HasForeignKey("GuestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Infrastructure.Frameworks.Models.Products", "Products")
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Guest");
+
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Infrastructure.Frameworks.Models.BoughtUserProduct", b =>
+                {
+                    b.HasOne("Infrastructure.Frameworks.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Infrastructure.Frameworks.Models.UserRole", b =>
                 {
-                    b.HasOne("Infrastructure.Frameworks.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("LoginId");
-
                     b.HasOne("Infrastructure.Frameworks.Models.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Infrastructure.Frameworks.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Role");
 
