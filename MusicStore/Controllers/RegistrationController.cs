@@ -77,7 +77,7 @@ public class RegistrationController : ControllerBase
 
     
     [AllowAnonymous]
-    [HttpGet("Products")]
+    [HttpPost("Products")]
     public async Task<IActionResult> Get(ProductFilterDto dto)
     {
         var _product = _lifetimeScope.Resolve<IProduct>();
