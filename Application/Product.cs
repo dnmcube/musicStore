@@ -19,15 +19,10 @@ public class Product : IProduct
         return productModel;
     }
     
-    public async Task<List<ProductDto>> AddItemBasket(ProductFilterDto dto)
+    public async Task<object> GetDicType()
     {
-        var productModel = await _productRepo.GetByFilter(dto);
-        return productModel;
+        var type = await _productRepo.GetDicType();
+        return type;
     }
-    
-    public async Task<List<ProductDto>> DeleteItemBasket(ProductFilterDto dto)
-    {
-        var productModel = await _productRepo.GetByFilter(dto);
-        return productModel;
-    }
+  
 }

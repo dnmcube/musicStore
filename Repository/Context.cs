@@ -1,6 +1,7 @@
 ﻿
 using Infrastructure.Frameworks.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Frameworks.DataBase;
 
@@ -23,22 +24,39 @@ public class Context : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<BaseModel>(entity =>
-        {
-            entity.Property(e => e.Id)
-                .HasDefaultValueSql("gen_random_uuid()");  // для PostgreSQL
-
-            entity.Property(e => e.CreateAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-            entity.Property(e => e.UpdateAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-            entity.Property(e => e.IsDeleted)
-                .HasDefaultValue(false);
-        });
+        // ConfigureBaseModel(modelBuilder.Entity<Products>());
+        // ConfigureBaseModel(modelBuilder.Entity<User>());
+        // ConfigureBaseModel(modelBuilder.Entity<Guest>());
+        // ConfigureBaseModel(modelBuilder.Entity<Basket>());
+        // ConfigureBaseModel(modelBuilder.Entity<BoughtUserProduct>());
+        // ConfigureBaseModel(modelBuilder.Entity<Role>());
+        // ConfigureBaseModel(modelBuilder.Entity<DicProductsType>());
+        
+        modelBuilder.Entity<Products>().ToTable("Products");
+        modelBuilder.Entity<User>().ToTable("Users");
+        modelBuilder.Entity<Guest>().ToTable("Guest");
+        modelBuilder.Entity<BoughtUserProduct>().ToTable("BoughtUserProduct");
+        modelBuilder.Entity<Basket>().ToTable("Basket");
+        modelBuilder.Entity<Role>().ToTable("Role");
+        modelBuilder.Entity<UserRole>().ToTable("UserRole");
+        modelBuilder.Entity<DicProductsType>().ToTable("DicProductsType");
     }
 
+    private void ConfigureBaseModel<TEntity>(EntityTypeBuilder<TEntity> entity)
+        where TEntity : BaseModel
+    {
+        entity.Property(e => e.Id)
+            .HasDefaultValueSql("gen_random_uuid()");
+
+        entity.Property(e => e.CreateAt)
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+        entity.Property(e => e.UpdateAt)
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+        entity.Property(e => e.IsDeleted)
+            .HasDefaultValue(false);
+    }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -57,6 +75,7 @@ public class Context : DbContext
     public DbSet<Basket> Basket { get; set; }
     public DbSet<Role> Role { get; set; }
     public DbSet<UserRole> UserRole { get; set; }
+    public DbSet<DicProductsType> DicProductsType { get; set; }
 
     
 

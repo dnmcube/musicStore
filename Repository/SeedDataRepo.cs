@@ -19,19 +19,10 @@ public class SeedDataRepo:ISeedDataRepo
     public async Task Execute()
     {
         await Roles();
+        await ProductType();
     }
 
-    // public async Task Test()
-    // {
-    //     var res = await _context.Set<Category>().ToListAsync();
-    //     foreach (var item in res)
-    //     {
-    //         item.TechTitle =  item.Title.Replace(" ", "_");
-    //     }
-    //
-    //     _context.UpdateRange(res);
-    //    await  _context.SaveChangesAsync();
-    // }
+
 
     public async Task Roles()
     {
@@ -51,6 +42,28 @@ public class SeedDataRepo:ISeedDataRepo
         if (rolesToAdd.Any())
         {
             await _context.AddRangeAsync(rolesToAdd);
+            await _context.SaveChangesAsync();
+        }
+    }
+    
+    public async Task ProductType()
+    {
+        // 1. Берем все роли из БД
+        var existingProductType = await _context.Set<DicProductsType>().ToListAsync();
+
+        // 2. Получаем все значения enum как строки
+        var enumProductType = Enum.GetNames(typeof(ProductTypeEnum)).ToList();
+
+        // 3. Находим те, которых нет в БД
+        var TypeToAdd = enumProductType
+            .Where(enumName => !existingProductType.Any(x => x.Name == enumName))
+            .Select(enumName => new DicProductsType() { Name = enumName, CreateAt = DateTime.Now, UpdateAt = DateTime.Now})
+            .ToList();
+        
+        
+        if (TypeToAdd.Any())
+        {
+            await _context.AddRangeAsync(TypeToAdd);
             await _context.SaveChangesAsync();
         }
     }

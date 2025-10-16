@@ -95,6 +95,15 @@ public class RegistrationController : ControllerBase
     }
     
     [AllowAnonymous]
+    [HttpGet("GetDictionaryType")]
+    public async Task<IActionResult> GetDictionaryType()
+    {
+        var _product = _lifetimeScope.Resolve<IProduct>();
+        var res = await _product.GetDicType();
+        return Ok(res);
+    }
+    
+    [AllowAnonymous]
     [HttpGet("BasketAddItem")]
     public async Task<IActionResult> BasketAddItem([FromForm] Guid GuestId, Guid ProductId)
     {

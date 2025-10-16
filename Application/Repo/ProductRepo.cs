@@ -1,5 +1,6 @@
 using Application.Domine;
 using Application.Dto;
+using Domain.Enums;
 using Infrastructure.Frameworks.DataBase;
 using Infrastructure.Frameworks.DataBase.BaseRepositories;
 using Infrastructure.Frameworks.Models;
@@ -46,5 +47,20 @@ public class ProductRepo:BaseRepo, IProductRepo
         }).ToListAsync();
 
         return res;
+    }
+
+    public async Task<object> GetDicType()
+    {
+        var res =  await _context.DicProductsType.Select(x => x.Name).ToListAsync();
+
+        var t = res.Select(x =>
+        {
+       
+                var enumValue = Enum.Parse<ProductTypeEnum>(x);
+                return  enumValue.GetDisplayName();
+       
+        }).ToList();
+
+        return t;
     }
 }
