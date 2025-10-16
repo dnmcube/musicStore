@@ -38,12 +38,12 @@ public class RegistrationController : ControllerBase
     
     [AllowAnonymous]
     [HttpGet("Guest")]
-    public async Task<IActionResult> Guest([FromBody] UserDto user)
+    public async Task<IActionResult> Guest()
     {
         try
         {
             var _registrade = _lifetimeScope.Resolve<IRegistrade>();
-            var id =await _registrade.Guest();
+            var id = await _registrade.Guest();
             return Ok(id);
         }
         catch (Exception e)
