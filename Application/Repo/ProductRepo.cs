@@ -43,7 +43,7 @@ public class ProductRepo:BaseRepo, IProductRepo
             Name = x.Name,
             Price = x.Price,
             Type = x.Type,
-            Image = x.Image
+            Image = "data:image/png;base64,"+ x.Image
         }).ToListAsync();
 
         return res;
