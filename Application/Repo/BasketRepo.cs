@@ -23,7 +23,7 @@ public class BasketRepo:BaseRepo, IBasketRepo
 
     public async Task AddItem(Guid UserId, Guid ProductId)
     {
-        await _context.Basket.AddAsync(new Infrastructure.Frameworks.Models.Basket()
+        await _context.Basket.AddAsync(new Basket()
             { GuestId = UserId, ProductsId = ProductId });
 
        await SaveChangesAsync();

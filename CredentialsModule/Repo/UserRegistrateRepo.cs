@@ -44,7 +44,9 @@ public class UserRegistrateRepo:BaseRepo,  IUserRegistrateRepo
 
     public async Task<Guid> AddGuestAsync()
     {
-        return await AddAsync(new Guest());
+        var id =  await AddAsync(new Guest());
+        await SaveChangesAsync();
+        return id;
     }
     public async Task UpdateUserAsync(User userModel)
     {

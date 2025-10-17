@@ -87,7 +87,7 @@ public class RegistrationController : ControllerBase
     
     [AllowAnonymous]
     [HttpGet("GetBasket")]
-    public async Task<IActionResult> GetBasket([FromForm] Guid GuestId)
+    public async Task<IActionResult> GetBasket( Guid GuestId)
     {
         var _basket = _lifetimeScope.Resolve<IBasket>();
         var res = await _basket.GetBasket(GuestId);
@@ -105,7 +105,7 @@ public class RegistrationController : ControllerBase
     
     [AllowAnonymous]
     [HttpGet("BasketAddItem")]
-    public async Task<IActionResult> BasketAddItem([FromForm] Guid GuestId, Guid ProductId)
+    public async Task<IActionResult> BasketAddItem( Guid GuestId,   Guid ProductId)
     {
         var _basket = _lifetimeScope.Resolve<IBasket>();
          await _basket.AddItemBasket(GuestId, ProductId);
@@ -114,7 +114,7 @@ public class RegistrationController : ControllerBase
     
     [AllowAnonymous]
     [HttpGet("BasketRemoveItem")]
-    public async Task<IActionResult> BasketRemoveItem([FromForm] Guid GuestId, Guid ProductId)
+    public async Task<IActionResult> BasketRemoveItem( Guid GuestId,   Guid ProductId)
     {
         var _basket = _lifetimeScope.Resolve<IBasket>();
         await _basket.DeleteItemBasket(GuestId, ProductId);
