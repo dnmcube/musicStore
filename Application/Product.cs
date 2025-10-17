@@ -19,7 +19,7 @@ public class Product : IProduct
         return new
         { 
             products = productModel.Item1,
-           totalPages = productModel.Item2 / 10
+           totalPages = (int)Math.Ceiling(productModel.Item2 / 10.0)
         };
     }
     
