@@ -18,7 +18,7 @@ public class BasketRepo:BaseRepo, IBasketRepo
 
     public async Task<object?> GetBasket(Guid UserId)
     {
-       return await _context.Basket.Where(x => x.GuestId == UserId).ToListAsync();
+       return await _context.Basket.Where(x => x.GuestId == UserId).Include(x => x.Products).Select(x => x.Products).ToListAsync();
     }
 
     public async Task AddItem(Guid UserId, Guid ProductId)
