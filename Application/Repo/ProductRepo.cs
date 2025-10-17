@@ -56,14 +56,38 @@ public class ProductRepo:BaseRepo, IProductRepo
     {
         var res =  await _context.DicProductsType.Select(x => x.Name).ToListAsync();
 
-        var t = res.Select(x =>
-        {
-       
-                var enumValue = Enum.Parse<ProductTypeEnum>(x);
-                return  enumValue.GetDisplayName();
-       
-        }).ToList();
+      
 
+        var categoryType = await _context.Products.GroupBy(x => x.Type).Select(x => new
+        {
+            type = x.Key,
+            image = x.First().Image
+        }).ToListAsync();
+ 
+        var t = categoryType.Select(x =>
+        {
+            // Найдём совпадение по имени типа
+            var matched = res.FirstOrDefault(r => r == x.type);
+
+            // Если нашли — парсим в enum
+            if (matched != null && Enum.TryParse<ProductTypeEnum>(matched, out var enumValue))
+            {
+                return new
+                {
+                    type = enumValue.GetDisplayName(),
+                    image = x.image
+                };
+            }
+
+            // fallback — если не нашли, просто вернуть исходное имя
+            return new
+            {
+                type = x.type,
+                image = x.image
+            };
+        }).ToList();
+        
+        
         return t;
     }
 }
