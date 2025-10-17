@@ -45,7 +45,8 @@ public class ProductRepo:BaseRepo, IProductRepo
             Type = x.Type,
             Image = "data:image/png;base64,"+ x.Image
         }).ToListAsync();
-
+ 
+        
         return res;
     }
 

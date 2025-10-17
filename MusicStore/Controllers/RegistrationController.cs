@@ -82,7 +82,11 @@ public class RegistrationController : ControllerBase
     {
         var _product = _lifetimeScope.Resolve<IProduct>();
         var res =  await _product.Get(dto);
-        return Ok(res);
+        return Ok(new
+        {
+            products = res,
+            totalPages = res.Count / 10
+        });
     }
     
     [AllowAnonymous]
