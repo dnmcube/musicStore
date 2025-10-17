@@ -86,8 +86,8 @@ public class RegistrationController : ControllerBase
     }
     
     [AllowAnonymous]
-    [HttpPost("GetBasket")]
-    public async Task<IActionResult> GetBasket([FromForm] 
+    [HttpGet("GetBasket")]
+    public async Task<IActionResult> GetBasket(
         Guid GuestId
     )
     {
