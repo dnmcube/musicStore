@@ -34,13 +34,14 @@ public class Auth:IAuth
 
     public async Task<object> RefreshTokenUpdate(string RefreshToken)
     {
-       (string Token, string RefreshToken, string error) res =  await _jwtService.RefreshTokenGet(RefreshToken);
+       (string Token, string RefreshToken, Guid? userId, string error) res =  await _jwtService.RefreshTokenGet(RefreshToken);
        if (string.IsNullOrWhiteSpace(res.error))
        {
            return new
            {
                token = res.Token,
-               refreshToken = res.RefreshToken
+               refreshToken = res.RefreshToken,
+               res.userId
            };
        }
 

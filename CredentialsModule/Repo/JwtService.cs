@@ -69,10 +69,10 @@ public class JwtService: IJwtService
         return jwttoken;
     }
 
-    public async Task<(string?, string?, string?)> RefreshTokenGet(string refreshToken)
+    public async Task<(string?, string?, Guid?, string?)> RefreshTokenGet(string refreshToken)
     {
         if (string.IsNullOrWhiteSpace(refreshToken))
-            return ("","","Refresh token missing");
+            return ("","",null, "Refresh token missing");
 
         var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -96,26 +96,26 @@ public class JwtService: IJwtService
         }
         catch (SecurityTokenException)
         {
-            return ("","","Invalid refresh token (signature/expired)");
+            return ("","",null,"Invalid refresh token (signature/expired)");
         }
         
         // 2) Получаем JTI (у тебя — userId)
         var jti = principal.FindFirst(JwtRegisteredClaimNames.Jti)?.Value;
         if (string.IsNullOrEmpty(jti))
-            return ("","","Refresh token does not contain jti");
+            return ("","",null,"Refresh token does not contain jti");
 
         // если jti хранит GUID
         if (!Guid.TryParse(jti, out var Id))
-            return ("","","Invalid jti format");
+            return ("","",null,"Invalid jti format");
 
         var user = await _userRegistrateRepo.GetUserById(Id);
         // 3) Берём пользователя/запись refresh token в БД и сверяем
         var _user = user.Id == Id;
-        if (_user == false) return ("","","User not found");
+        if (_user == false) return ("","",null,"User not found");
         
         // Предполагаем, что в таблице Users есть поля RefreshToken и RefreshTokenExpiry
         if (user.RefreshToken != refreshToken || user.ExpiresAt <= DateTime.UtcNow)
-            return ("","","Refresh token mismatch or expired");
+            return ("","",null,"Refresh token mismatch or expired");
 
         // 4) Всё ок — создаём новый access (и rotate refresh)
         var newAccess = GenerateToken(user.Login, RolesEnum.Client.ToString(), user.Id);
@@ -128,7 +128,7 @@ public class JwtService: IJwtService
         await _userRegistrateRepo.SaveChangesAsync();
         
         
-        return (newAccess, newRefresh, "");
+        return (newAccess, newRefresh, user.Id , "");
     }
  
     

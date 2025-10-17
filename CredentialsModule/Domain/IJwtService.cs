@@ -9,5 +9,5 @@ public interface IJwtService
 
    public string GenerateToken(string nameIdentifier, string role, Guid Jti);
    string GenerateRefreshToken(string nameIdentifier, string role, Guid Jti);
-   Task<(string?, string?, string?)> RefreshTokenGet(string refreshToken);
+   Task<(string?, string?, Guid?, string?)> RefreshTokenGet(string refreshToken);
 }
