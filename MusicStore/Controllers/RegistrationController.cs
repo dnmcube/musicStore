@@ -86,8 +86,8 @@ public class RegistrationController : ControllerBase
     }
     
     [AllowAnonymous]
-    [HttpGet("GetBasket")]
-    public async Task<IActionResult> GetBasket( Guid GuestId)
+    [HttpPost("GetBasket")]
+    public async Task<IActionResult> GetBasket([FromBody] Guid GuestId)
     {
         var _basket = _lifetimeScope.Resolve<IBasket>();
         var res = await _basket.GetBasket(GuestId);
