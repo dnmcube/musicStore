@@ -83,7 +83,7 @@ public class ProductRepo:BaseRepo, IProductRepo
             return new
             {
                 type = x.type,
-                image = x.image
+                image ="data:image/png;base64,"+ x.image
             };
         }).ToList();
         
