@@ -13,10 +13,14 @@ public class Product : IProduct
         _productRepo = productRepo;
     }
 
-    public async Task<List<ProductDto>> Get(ProductFilterDto dto)
+    public async Task<object> Get(ProductFilterDto dto)
     {
         var productModel = await _productRepo.GetByFilter(dto);
-        return productModel;
+        return new
+        { 
+            products = productModel.Item1,
+           totalPages = productModel.Item2 / 10
+        };
     }
     
     public async Task<object> GetDicType()

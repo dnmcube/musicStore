@@ -15,7 +15,7 @@ public class ProductRepo:BaseRepo, IProductRepo
     {
     }
     
-    public async Task<List<ProductDto>> GetByFilter(ProductFilterDto dto)
+    public async Task<(List<ProductDto>, int)> GetByFilter(ProductFilterDto dto)
     {
         if (dto.Page <= 0)
             dto.Page = 1;
@@ -25,6 +25,8 @@ public class ProductRepo:BaseRepo, IProductRepo
         var query = _context.Products
             .Where(x => string.IsNullOrEmpty(dto.Type) || dto.Type == x.Type);
 
+        int totalCount = await query.CountAsync();
+        
         // Сортировка
         query = dto.PriceUpDown
             ? query.OrderBy(x => x.Price)
@@ -47,7 +49,7 @@ public class ProductRepo:BaseRepo, IProductRepo
         }).ToListAsync();
  
         
-        return res;
+        return (res, totalCount);
     }
 
     public async Task<object> GetDicType()
